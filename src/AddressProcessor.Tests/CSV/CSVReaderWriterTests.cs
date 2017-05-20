@@ -26,11 +26,34 @@ namespace Csv.Tests
         }
 
         [Test]
-        public void Throws_Exception_when_Opening_invalid_filepath()
+        public void Throws_Exception_when_Opening_invalid_filepath_in_read_mode()
         {
 
             Assert.Throws<FileNotFoundException>(() => _subject.Open(@"test_data\FileWhichDoesNotExist.dat", CSVReaderWriter.Mode.Read));
         }
 
-    }
+        [Test]
+        public void Writes_File_given_valid_filepath()
+        {
+            string expectedFilePath = @"test_data\file_to_write.text";
+            var fileToWriteTo = new FileInfo(expectedFilePath);
+
+            fileToWriteTo.Delete();
+
+            Assert.That(!fileToWriteTo.Exists, string.Format("File should have been deleted {0} \n but still exists", fileToWriteTo.FullName));
+            
+            _subject.Open(expectedFilePath,CSVReaderWriter.Mode.Write);
+
+            var expectedFileInfo = new FileInfo(expectedFilePath);
+
+            Assert.That(expectedFileInfo.Exists, string.Format("File was not created in {0}", expectedFileInfo.FullName));
+        }
+
+        [TearDown]
+        public void Teardown()
+        {
+            _subject.Close();
+        }
+        
+     }
 }
