@@ -51,7 +51,7 @@ namespace Csv.Tests
 
 
         [Test]
-        public void Checks_for_non_empty_rows()
+        public void Checks_for_lines_that_have_a_valid_number_of_columns()
         {
             _subject.Open(contacts_test_data_cvs, CSVReaderWriter.Mode.Read);
             
@@ -61,7 +61,7 @@ namespace Csv.Tests
         }
 
         [Test]
-        public void Can_extract_name_and_address()
+        public void Can_extract_name_and_address_from_line()
         {
             _subject.Open(contacts_test_data_cvs, CSVReaderWriter.Mode.Read);
 
