@@ -26,6 +26,16 @@ namespace Csv.Tests
         }
 
         [Test]
+        public void Closes_Valid_File_without_exception()
+        {
+            _subject.Open(contacts_test_data_cvs, CSVReaderWriter.Mode.Read);
+            
+            Assert.DoesNotThrow(() =>_subject.Close());
+        }
+
+
+
+        [Test]
         public void Throws_Exception_when_Opening_invalid_filepath_in_read_mode()
         {
 
