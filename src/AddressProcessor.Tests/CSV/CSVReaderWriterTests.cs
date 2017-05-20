@@ -43,7 +43,7 @@ namespace Csv.Tests
         }
 
         [Test]
-        public void Writes_File_given_valid_filepath()
+        public void Write_can_create_a_file()
         {
             string expectedFilePath = @"test_data\file_to_write.text";
             var fileToWriteTo = new FileInfo(expectedFilePath);
@@ -54,9 +54,9 @@ namespace Csv.Tests
             
             _subject.Open(expectedFilePath,CSVReaderWriter.Mode.Write);
 
-            var expectedFileInfo = new FileInfo(expectedFilePath);
+            var actualFile = new FileInfo(expectedFilePath);
 
-            Assert.That(expectedFileInfo.Exists, string.Format("File was not created in {0}", expectedFileInfo.FullName));
+            Assert.That(actualFile.Exists, string.Format("File was not created in {0}", actualFile.FullName));
         }
 
 
@@ -76,13 +76,38 @@ namespace Csv.Tests
             _subject.Open(contacts_test_data_cvs, CSVReaderWriter.Mode.Read);
 
             string name = "";
-            string address ="";
+            string address = "";
             var hasValidFirstRow = _subject.Read(out name, out address);
 
             Assert.That(hasValidFirstRow, "First row had no columns");
             Assert.That(name, Is.Not.Empty, "Expected Name to not be empty");
             Assert.That(address, Is.Not.Empty, "Expected address to not be empty");
         }
+
+
+        [Test]
+        public void Write_Method_can_write_to_file()
+        {
+            string expectedFilePath = @"test_data\file_with_content_to_write_to.txt";
+            var fileToWriteTo = new FileInfo(expectedFilePath);
+
+            fileToWriteTo.Delete();
+
+            Assert.That(!fileToWriteTo.Exists, string.Format("File should have been deleted {0} \n but still exists", fileToWriteTo.FullName));
+
+            _subject.Open(expectedFilePath, CSVReaderWriter.Mode.Write);
+
+            string[] columns = new string[] { "First Column", "Second column", "Third column"};
+            _subject.Write(columns);
+            _subject.Close();
+
+            var actualFile = new FileInfo(expectedFilePath);
+
+            Assert.That(actualFile.Exists, string.Format("File was not created in {0}", actualFile.FullName));
+            Assert.That(actualFile.Length, Is.Not.EqualTo(0), string.Format("File was empty in {0}", actualFile.FullName));              
+        }
+
+
 
         [TearDown]
         public void Teardown()
