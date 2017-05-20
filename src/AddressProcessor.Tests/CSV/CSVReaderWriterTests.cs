@@ -49,6 +49,31 @@ namespace Csv.Tests
             Assert.That(expectedFileInfo.Exists, string.Format("File was not created in {0}", expectedFileInfo.FullName));
         }
 
+
+        [Test]
+        public void Checks_for_non_empty_rows()
+        {
+            _subject.Open(contacts_test_data_cvs, CSVReaderWriter.Mode.Read);
+            
+            var hasValidFirstRow  = _subject.Read("", "");
+
+            Assert.That(hasValidFirstRow, "First row had no columns");
+        }
+
+        [Test]
+        public void Can_extract_name_and_address()
+        {
+            _subject.Open(contacts_test_data_cvs, CSVReaderWriter.Mode.Read);
+
+            string name = "";
+            string address ="";
+            var hasValidFirstRow = _subject.Read(out name, out address);
+
+            Assert.That(hasValidFirstRow, "First row had no columns");
+            Assert.That(name, Is.Not.Empty, "Expected Name to not be empty");
+            Assert.That(address, Is.Not.Empty, "Expected address to not be empty");
+        }
+
         [TearDown]
         public void Teardown()
         {
