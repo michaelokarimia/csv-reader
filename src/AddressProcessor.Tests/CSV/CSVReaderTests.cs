@@ -34,6 +34,14 @@ namespace Csv.Tests
         }
 
         [Test]
+        public void Closes_method_on_uninitialised_file_has_no_side_effects()
+        {
+            _subject = new CSVReader();
+
+            Assert.DoesNotThrow(() => _subject.Close());
+        }
+
+        [Test]
         public void Throws_Exception_when_Opening_invalid_filepath_in_read_mode()
         {
 

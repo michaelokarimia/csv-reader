@@ -1,5 +1,4 @@
 ﻿using System;
-using System.IO;
 
 namespace AddressProcessing.CSV
 {
@@ -10,12 +9,13 @@ namespace AddressProcessing.CSV
 
     public class CSVReaderWriter
     {
-        private StreamWriter _writerStream = null;
         private CSVReader csvReader;
+        private CSVWriter csvWriter;
 
         public CSVReaderWriter()
         {
             csvReader = new CSVReader();
+            csvWriter = new CSVWriter();
         }
 
         [Flags]
@@ -29,8 +29,7 @@ namespace AddressProcessing.CSV
             }
             else if (mode == Mode.Write)
             {
-                FileInfo fileInfo = new FileInfo(fileName);
-                _writerStream = fileInfo.CreateText();
+                csvWriter = new CSVWriter(fileName);
             }
             else
             {
@@ -50,8 +49,7 @@ namespace AddressProcessing.CSV
                     outPut += "\t";
                 }
             }
-
-            WriteLine(outPut);
+            csvWriter.WriteLine(outPut);
         }
 
         public bool Read(string column1, string column2)
@@ -102,20 +100,10 @@ namespace AddressProcessing.CSV
             }
         }
 
-        private void WriteLine(string line)
-        {
-            _writerStream.WriteLine(line);
-        }
-
         public void Close()
         {
-            if (_writerStream != null)
-            {
-                _writerStream.Close();
-            }
-
+            csvWriter.Close();
             csvReader.Close();
-            
         }
     }
 }

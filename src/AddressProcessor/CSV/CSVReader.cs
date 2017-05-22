@@ -6,9 +6,13 @@ namespace AddressProcessing.CSV
     {
         private readonly StreamReader readerStream;
 
-        public CSVReader(string fileName)
+        public CSVReader(string filePath)
         {
-            readerStream = File.OpenText(fileName);
+            if (File.Exists(filePath))
+            {
+                readerStream = File.OpenText(filePath);
+            }
+            else throw new FileNotFoundException(string.Format("Could not open file path: {0}", filePath));
         }
 
         public CSVReader()
