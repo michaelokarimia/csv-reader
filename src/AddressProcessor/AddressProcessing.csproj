@@ -55,6 +55,7 @@
   <ItemGroup>
     <Compile Include="Address\AddressRecord.cs" />
     <Compile Include="Address\AddressFileProcessor.cs" />
+    <Compile Include="CSV\CSVReader.cs" />
     <Compile Include="CSV\CSVReaderWriter For Annotation.cs" />
     <Compile Include="CSV\CSVReaderWriter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

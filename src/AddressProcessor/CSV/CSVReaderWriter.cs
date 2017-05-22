@@ -10,8 +10,13 @@ namespace AddressProcessing.CSV
 
     public class CSVReaderWriter
     {
-        private StreamReader _readerStream = null;
         private StreamWriter _writerStream = null;
+        private CSVReader csvReader;
+
+        public CSVReaderWriter()
+        {
+            csvReader = new CSVReader();
+        }
 
         [Flags]
         public enum Mode { Read = 1, Write = 2 };
@@ -20,7 +25,7 @@ namespace AddressProcessing.CSV
         {
             if (mode == Mode.Read)
             {
-                _readerStream = File.OpenText(fileName);
+                csvReader = new CSVReader(fileName);
             }
             else if (mode == Mode.Write)
             {
@@ -53,7 +58,7 @@ namespace AddressProcessing.CSV
         {
             char[] separator = { '\t' };
 
-            var line = ReadLine();
+            var line = csvReader.ReadLine();
             var columns = line.Split(separator);
 
             return columns.Length != 0;
@@ -69,7 +74,7 @@ namespace AddressProcessing.CSV
 
             char[] separator = { '\t' };
 
-            line = ReadLine();
+            line = csvReader.ReadLine();
 
             if (line == null)
             {
@@ -102,11 +107,6 @@ namespace AddressProcessing.CSV
             _writerStream.WriteLine(line);
         }
 
-        private string ReadLine()
-        {
-            return _readerStream.ReadLine();
-        }
-
         public void Close()
         {
             if (_writerStream != null)
@@ -114,10 +114,8 @@ namespace AddressProcessing.CSV
                 _writerStream.Close();
             }
 
-            if (_readerStream != null)
-            {
-                _readerStream.Close();
-            }
+            csvReader.Close();
+            
         }
     }
 }
