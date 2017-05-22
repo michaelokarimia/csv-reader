@@ -39,6 +39,12 @@ namespace AddressProcessing.CSV
 
         public void Write(params string[] columns)
         {
+            var formattedLine = GetTabDelimitedString(columns);
+            csvWriter.WriteLine(formattedLine);
+        }
+
+        private static string GetTabDelimitedString(string[] columns)
+        {
             string outPut = "";
 
             for (int i = 0; i < columns.Length; i++)
@@ -49,12 +55,17 @@ namespace AddressProcessing.CSV
                     outPut += "\t";
                 }
             }
-            csvWriter.WriteLine(outPut);
+            return outPut;
         }
 
         public bool Read(string column1, string column2)
         {
-            char[] separator = { '\t' };
+            return IsNextLineTabDelimited();
+        }
+
+        private bool IsNextLineTabDelimited()
+        {
+            char[] separator = {'\t'};
 
             var line = csvReader.ReadLine();
             var columns = line.Split(separator);
